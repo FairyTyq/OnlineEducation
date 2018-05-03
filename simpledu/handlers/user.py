@@ -8,9 +8,6 @@ user = Blueprint('user',__name__,url_prefix='/user')
 @user.route('/<user_name>')
 def index(user_name):
     usr = User.query.filter(User.username==user_name).first()
-    courses = Course.query.filter(Course.author_id==usr.id).all()
-    
-    
-    return "USER NAME:%s,%s"%(usr.id,courses[0].name)
+    return render_template('user.html',usr=usr)
 
 
