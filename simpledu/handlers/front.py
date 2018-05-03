@@ -2,6 +2,7 @@
 
 from flask import Blueprint,render_template
 from simpledu.models import Course
+from simpledu.froms import LoginForm,RegisterForm
 
 # 省略了 url_prefix，那么默认就是 '/'
 front = Blueprint('front',__name__)
@@ -13,8 +14,10 @@ def index():
 
 @front.route('/register')
 def register():
-    return render_template('register.html')
+    form = RegisterForm()
+    return render_template('register.html',form=form)
 
 @front.route('/login')
 def login():
-    return render_template('login.html')
+    form = LoginForm()
+    return render_template('login.html',form=form)
