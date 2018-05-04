@@ -1,5 +1,13 @@
 {% extends "base.html" %}
+{% from 'macros.html' import render_form %}
+
+{% block title %}
+	Register Page
+{% endblock %}
 
 {% block body %}
-	<h1>Register Page</h1>
-{% endblock %}
+    <div class="form">
+        <h2>Register</h2>
+        {{ render_form(form,url_for('front.register')) }}
+    </div>
+{% endblock body %}

@@ -1,6 +1,8 @@
 # coding:utf-8
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash,check_password_hash
 
 # 注意这里不再传app了，为什么？
 # 因为要根据配置动态创建Flask app，官方推荐做法是使用一个工厂函数专门负责创建app
@@ -18,7 +20,7 @@ class Base(db.Model):
                     onupdate=datetime.utcnow)
 
 
-class User(Base):
+class User(Base,UserMixin):
     __tablename__ = 'user'
     
     # 用数值表示角色，方便判断是否有权限，比如有个操作要角色为员工

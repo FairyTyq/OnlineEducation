@@ -1,20 +1,47 @@
 # coding:utf-8
 
 from flask_wtf import FlaskForm
-from wtforms import StringFiled,PasswordField,SubmitField,BooleanField
+from wtforms import StringField,PasswordField,SubmitField,BooleanField
 from wtforms.validators import Length,Email,EqualTo,Required
+from wtforms import ValidationError
+from simpledu.models import User,db
 
 class RegisterForm(FlaskForm):
-    username = StringField('ÓÃ»§Ãû',validators=[Required(),Length(3,24)])
-    email = StringField('ÓÊÏä',validators=[Required(),Email()])
-    password = PasswordField('ÃÜÂë',validators=[Required(),Length(6,24)])
-    repeat_password = PasswordField('ÖØ¸´ÃÜÂë',validators=[Required(),EquaTo('password')])
-    submit = SubmitField('Ìá½»')
+    username = StringField('ç”¨æˆ·å',validators=[Required(),Length(3,24)])
+    email = StringField('é‚®ç®±',validators=[Required(),Email()])
+    password = PasswordField('å¯†ç ',validators=[Required(),Length(6,24)])
+    repeat_password = PasswordField('é‡å¤å¯†ç ',validators=[Required(),EqualTo('password')])
+    submit = SubmitField('æäº¤')
+    
+    def create_user(self):
+        user = User()
+        user.username = self.username.data
+        user.email = self.email.data
+        user.password = self.password.data
+        db.session.add(user)
+        db.session.commit()
+        return user
 
+    def validate_username(self,field):
+        if User.query.filter_by(username=field.data).first():
+            raise ValidationError('ç”¨æˆ·åå·²ç»å­˜åœ¨')
+    
+    def validate_email(self,field):
+        if User.query.filter_by(email=field.data).first():
+            raise ValidationError('é‚®ç®±å·²ç»å­˜åœ¨')
 
+        
 class LoginForm(FlaskForm):
-    email = StringField('ÓÊÏä',validators=[Required(),Email()])
-    password = PasswordField('ÃÜÂë',validators=[Required(),Length(6,24)])
-    remember_me = BooleanField('¼Ç×¡ÎÒ')
-    submit = SubmitField('Ìá½»')
+    email = StringField('é‚®ç®±',validators=[Required(),Email()])
+    password = PasswordField('å¯†ç ',validators=[Required(),Length(6,24)])
+    remember_me = BooleanField('è®°ä½æˆ‘')
+    submit = SubmitField('æäº¤')
+    
+    def validate_email(self,field):
+        if field.data and not User.query.filter_by(email=field.data).first():
+            raise ValidationError('é‚®ç®±æœªæ³¨å†Œ')
 
+    def validate_password(self,field):
+        user = User.query.filter_by(email=self.email.data).first()
+        if user and not user.check_password(field.data):
+            raise ValidationError('å¯†ç é”™è¯¯')
