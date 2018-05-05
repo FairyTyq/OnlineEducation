@@ -3,6 +3,7 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash,check_password_hash
+from flask import url_for
 
 # 注意这里不再传app了，为什么？
 # 因为要根据配置动态创建Flask app，官方推荐做法是使用一个工厂函数专门负责创建app
@@ -76,5 +77,35 @@ class Course(Base):
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(128),unique=True,index=True,nullable=False)
     # ondelete='CASCASE' 表示如果用户被删除了，那么作者是他的课程也会被及联删除
+    # 课程描述信息
+    description = db.Column(db.String(256))
+    # 课程图片url地址
+    image_url = db.Column(db.String(256))
     author_id = db.Column(db.Integer,db.ForeignKey('user.id',ondelete='CASCADE'))
     author = db.relationship('User',uselist=False)
+    chapters = db.relationship('Chapter')
+    
+    @property
+    def url(self):
+        return url_for('course.detail',course_id=self.id)
+    
+    def __repr__(self):
+        return '<Course:{}>'.format(self.name)
+
+class Chapter(Base):
+    __tablename__='chapter'
+
+    id = db.Column(db.Integer,primary_key=True)
+    name = db.Column(db.String(128),unique=True,index=True)
+    description = db.Column(db.String(256))
+    # 课程视频 url 地址
+    video_url = db.Column(db.String(256))
+    # 视频时长，格式：'30:15','1:15:20'
+    video_duration = db.Column(db.String(24))
+    # 关联到课程，并且客户曾删除及联删除相关章节
+    course_id = db.Column(db.Integer,db.ForeignKey('course.id',ondelete='CASCADE'))
+    course = db.relationship('Course',uselist=False)
+
+
+    def __repr__(self):
+        return '<Chapter:{}>'.format(self.name)

@@ -1,4 +1,29 @@
-.form{
+.nav-pagination {
+    text-align: center;
+}
+
+a,
+a:hover,
+a:visited {
+    text-decoration: none !important;
+}
+
+.course_name,
+.course_description {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap
+}
+
+.course img {
+    height: 160px !important;
+}
+
+body {
+    background-color: #ffffff;
+}
+
+.form {
     /* 设置form的宽度为400px */
     width: 400px;
     /* 设置 form 居中 */

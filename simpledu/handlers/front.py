@@ -7,14 +7,23 @@ from flask import flash
 from flask import redirect,url_for
 from simpledu.models import User
 from flask_login import login_user,logout_user,login_required
+from flask import request,current_app 
 
 # 省略了 url_prefix，那么默认就是 '/'
 front = Blueprint('front',__name__)
 
 @front.route('/')
 def index():
-    courses = Course.query.all()
-    return render_template('index.html',courses=courses)
+    #courses = Course.query.all()
+    # get pages from parameters
+    page = request.args.get('page',default=1,type=int)
+    # create paginate object
+    pagination = Course.query.paginate(
+        page=page,
+        per_page=current_app.config['INDEX_PER_PAGE'],
+        error_out=False
+        ) 
+    return render_template('index.html',pagination=pagination)
 
 @front.route('/register',methods=['GET','POST'])
 def register():
