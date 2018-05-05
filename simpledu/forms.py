@@ -4,9 +4,10 @@ import re
 
 from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField,SubmitField,BooleanField
-from wtforms.validators import Length,Email,EqualTo,Required
+from wtforms import TextAreaField,IntegerField
+from wtforms.validators import Length,Email,EqualTo,Required,URL,NumberRange
 from wtforms import ValidationError
-from simpledu.models import User,db
+from simpledu.models import User,Course,db
 
 class RegisterForm(FlaskForm):
     username = StringField('用户名',validators=[Required(),Length(3,24)])
@@ -51,3 +52,31 @@ class LoginForm(FlaskForm):
         user = User.query.filter_by(username=self.username.data).first()
         if user and not user.check_password(field.data):
             raise ValidationError('密码错误')
+
+
+class CourseForm(FlaskForm):
+    name = StringField('Course Name',validators=[Required(),Length(5,32)])
+    description = TextAreaField('Course Introduction',validators=[Required(),Length(20,256)])
+    image_url = StringField('Cover Image',validators=[Required(),URL()])
+    author_id = IntegerField('Author ID',validators=[Required(),NumberRange(min=1,message='Invalid ID')])
+    submit = SubmitField('Submit')
+
+    def validate_author_id(self,field):
+        if not User.query.get(self.author_id.data):
+            raise ValidationError('User does not exist')
+
+    def create_course(self):
+        course = Course()
+        # fill course object with courseform data
+        self.populate_obj(course)
+        db.session.add(course)
+        db.session.commit()
+        return course
+
+    def update_course(self,course):
+        self.populate_obj(course)
+        db.session.add(course)
+        db.session.commit()
+        return course
+
+
