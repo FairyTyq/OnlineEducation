@@ -80,3 +80,24 @@ class CourseForm(FlaskForm):
         return course
 
 
+class UserForm(FlaskForm):
+    username = StringField('User Name',validators=[Required(),Length(3,24)])
+    email = StringField('Email',validators=[Required(),Email()])
+    password = StringField('PassWord',validators=[Required(),Length(3,24)])
+    job = StringField('Job',validators=[Required(),Length(3,64)]) 
+    role = IntegerField('Role',validators=[Required(),NumberRange(min=10,max=30,message='Invalid role')])
+    submit = SubmitField('Submit')
+
+    def update_user(self,user):
+        self.populate_obj(user)
+        db.session.add(user)
+        db.session.commit()
+        return user
+
+    def create_user(self):
+        user = User()
+        self.populate_obj(user)
+        db.session.add(user)
+        db.session.commit()
+        return user
+

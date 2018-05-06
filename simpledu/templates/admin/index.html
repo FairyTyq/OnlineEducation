@@ -9,15 +9,19 @@ Admin
 	<div class="col-md-3">
 		<h4>Manage</h4>
 		<div class="list-group">
-			<a href="#" class="list-group-item">Users</a>
+			<a href="{{ url_for('admin.users') }}" class="list-group-item">Users</a>
 			<a href="{{ url_for('admin.courses') }}" class="list-group-item">Courses</a>
 		</div>
 
 		{% block operation %}
+			<a href="{{ url_for('admin.create_user') }}" type="button" class="btn btn-primary">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+			Add   User
+			</a>
 			<a href="{{ url_for('admin.create_course') }}" type="button" class="btn btn-primary">
 			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 			Add Course
-			</a>
+			</a>			
 		{% endblock %}
 	</div>
 	<div class="col-md-9">
