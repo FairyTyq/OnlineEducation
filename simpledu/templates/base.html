@@ -26,7 +26,7 @@
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 				<li class="active"><a href="/">Courses<span class="sr-only">(current)</span></a></li>
-				<li><a href="#">Living</a></li>
+                <li><a href="{{ url_for('live.index') }}">Live</a></li>
 				{% if current_user.is_authenticated and current_user.is_admin %}
 					<li> <a href="{{ url_for('admin.index') }}">Console</a></li>
 				{% endif %}
