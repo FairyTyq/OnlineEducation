@@ -4,7 +4,7 @@ from flask import Blueprint,render_template
 from flask import redirect,url_for,flash
 from flask import request,current_app
 from simpledu.decorators import admin_required
-from simpledu.models import Course,User
+from simpledu.models import Course,User,Live
 from simpledu.forms import CourseForm,UserForm,db
 
 admin = Blueprint('admin',__name__,url_prefix='/admin')
@@ -98,4 +98,28 @@ def delete_user(user_id):
 	return redirect(url_for('admin.users'))
 
 
+@admin.route('/live')
+@admin_required
+def lives():
+	page = request.args.get('page',default=1,type=int)
+	pagination = Live.query.paginate(
+			page = page,
+			per_page = current_app.config['ADMIN_PER_PAGE'],
+			error_out = False
+		)
+	return render_template('admin/lives.html',pagination=pagination)
 
+@admin.route('/live/create',methods=['GET','POST'])
+@admin_required
+def create_live():
+	pass
+
+@admin.route('/live/<int:live_id>/edit',methods=['GET','POST'])
+@admin_required
+def edit_live(live_id):
+	pass
+
+@admin.route('/live/<int:live_id>/delete')
+@admin_required
+def delete_live(live_id):
+	pass

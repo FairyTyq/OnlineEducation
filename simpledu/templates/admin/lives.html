@@ -2,14 +2,14 @@
 {% from "macros.html" import render_pagination %}
 
 {% block title %}
-Admin - courses
+Admin - Lives
 {% endblock %}
 
 {% block operation %}
-	<a href="{{ url_for('admin.create_course') }}" type="button" class="btn btn-primary">
+	<a href="{{ url_for('admin.create_live') }}" type="button" class="btn btn-primary">
 	<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-	Add Course
-	</a>			
+	Add  Live
+	</a>		
 {% endblock %}
 
 {% block admin %}
@@ -17,24 +17,24 @@ Admin - courses
 	<thead>
 		<tr>
 			<th>ID</th>
-			<th>Name</th>
-			<th>Author</th>
+			<th>Live Name</th>
+			<th>User ID</th>		
 			<th>Operting</th>
 		</tr>
 		<tbody>
-			{% for course in pagination.items %}
+			{% for live in pagination.items %}
 			<tr>
-				<td>{{ course.id }}</td>
-				<td>{{ course.name }}</td>
-				<td>{{ course.author.username }}</td>
+				<td>{{ live.id }}</td>
+				<td>{{ live.name }}</td>
+				<td>{{ live.user_id }}</td>							
 				<td>
 					<!-- Two Bootstrap icons are used to represent edit and delete operations -->
 					<div class="btn-group" role="group">
-						<a href="{{ url_for('admin.edit_course',course_id=course.id) }}" type="button" class="btn btn-default" title="Edit">
+						<a href="{{ url_for('admin.edit_live',live_id=live.id) }}" type="button" class="btn btn-default" title="Edit">
 							<span class="glyphicon glyphicon-pencil" title="Edit" aria-hidden="true">
 							</span>
 						</a>
-						<a href="{{ url_for('admin.delete_course',course_id=course.id) }}" type="button" class="btn btn-default">
+						<a href="{{ url_for('admin.delete_live',live_id=live.id) }}" type="button" class="btn btn-default">
 							<span class="glyphicon glyphicon-trash" title="Delete" aria-hidden="true"></span>
 						</a>
 					</div>	
@@ -46,5 +46,5 @@ Admin - courses
 </table>
 
 <!-- use macro render this page -->
-{{ render_pagination(pagination,'admin.courses') }}
+{{ render_pagination(pagination,'admin.lives') }}
 {% endblock %}
