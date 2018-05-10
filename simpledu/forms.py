@@ -7,7 +7,7 @@ from wtforms import StringField,PasswordField,SubmitField,BooleanField
 from wtforms import TextAreaField,IntegerField
 from wtforms.validators import Length,Email,EqualTo,Required,URL,NumberRange
 from wtforms import ValidationError
-from simpledu.models import User,Course,db
+from simpledu.models import User,Course,Live,db
 
 class RegisterForm(FlaskForm):
     username = StringField('用户名',validators=[Required(),Length(3,24)])
@@ -101,3 +101,18 @@ class UserForm(FlaskForm):
         db.session.commit()
         return user
 
+
+class LiveForm(FlaskForm):
+    name = StringField('Live Name',validators=[Required(),Length(3,24)])
+    user_id = IntegerField('User ID',validators= [Required(),NumberRange(min=1,message="ïnvalid ID")])
+    submit = SubmitField('Submit')
+
+    def update_live(self,live):
+        pass
+
+    def create_live(self):
+        live = Live()
+        self.populate_obj(live)
+        db.session.add(live)
+        db.session.commit()
+        return live

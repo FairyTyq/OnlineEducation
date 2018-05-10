@@ -18,7 +18,8 @@ Admin - Lives
 		<tr>
 			<th>ID</th>
 			<th>Live Name</th>
-			<th>User ID</th>		
+			<th>User ID</th>
+			<th>User Name</th>		
 			<th>Operting</th>
 		</tr>
 		<tbody>
@@ -26,6 +27,7 @@ Admin - Lives
 			<tr>
 				<td>{{ live.id }}</td>
 				<td>{{ live.name }}</td>
+				<td>{{ live.user.username }}</td>
 				<td>{{ live.user_id }}</td>							
 				<td>
 					<!-- Two Bootstrap icons are used to represent edit and delete operations -->
