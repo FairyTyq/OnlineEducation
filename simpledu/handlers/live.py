@@ -6,6 +6,6 @@ live = Blueprint('live',__name__,url_prefix='/live')
 
 @live.route('/')
 def index():
-	live = Live.query.filter(Live.id==3).first()
+	live = Live.query.filter(Live.id==1).first()
 	return render_template('live/index.html',live=live)
 
