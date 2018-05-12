@@ -19,11 +19,13 @@ class Chatroom(object):
 		# subscribe to chat channel
 		self.pubsub.subscribe('chat')
 
+
 	def register(self,client):
 		self.clients.append(client)
 
+
 	def send(self,client,data):
-		# send data to every client
+		# send data to each client
 		try:
 			client.send(data.decode('utf-8'))
 		except:
@@ -53,7 +55,6 @@ chat.start()
 def inbox(ws):
 	while not ws.closed:
 		message = ws.receive()
-
 		if message:
 			# send message to chat channnel
 			redis.publish('chat',message)
@@ -64,6 +65,7 @@ def outbox(ws):
 	# this function used to register client connection ,
 	# also send message which received from Chatroom to these clients
 	chat.register(ws)
+	redis.publish('chat','New user come in, people count:%s'%len(chat.clients))
 	while not ws.closed:
 		gevent.sleep(0.1)
 
