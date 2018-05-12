@@ -5,7 +5,7 @@ from flask import redirect,url_for,flash
 from flask import request,current_app
 from simpledu.decorators import admin_required
 from simpledu.models import Course,User,Live
-from simpledu.forms import CourseForm,UserForm,LiveForm,db
+from simpledu.forms import CourseForm,UserForm,LiveForm,MessageForm,db
 
 admin = Blueprint('admin',__name__,url_prefix='/admin')
 
@@ -129,3 +129,13 @@ def edit_live(live_id):
 @admin_required
 def delete_live(live_id):
 	pass
+
+
+@admin.route('/message',methods=['GET','POST'])
+@admin_required
+def message():
+	form = MessageForm()
+	if form.validate_on_submit():
+		form.send_msg()
+		flash('Send Message,OK!')
+	return render_template('admin/sys_msg.html',form=form)

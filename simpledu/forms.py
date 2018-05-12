@@ -8,6 +8,7 @@ from wtforms import TextAreaField,IntegerField
 from wtforms.validators import Length,Email,EqualTo,Required,URL,NumberRange
 from wtforms import ValidationError
 from simpledu.models import User,Course,Live,db
+from .handlers.ws import redis
 
 class RegisterForm(FlaskForm):
     username = StringField('用户名',validators=[Required(),Length(3,24)])
@@ -116,3 +117,12 @@ class LiveForm(FlaskForm):
         db.session.add(live)
         db.session.commit()
         return live
+
+
+
+class MessageForm(FlaskForm):
+    msg = TextAreaField('System Message',validators=[Required(),Length(1,256)])
+    submit = SubmitField('Submit')
+
+    def send_msg(self):
+        redis.publish('chat','System: %s'%self.msg)
