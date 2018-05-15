@@ -2,6 +2,7 @@
 
 import redis
 import gevent
+import json
 
 from flask import Blueprint
 
@@ -65,7 +66,13 @@ def outbox(ws):
 	# this function used to register client connection ,
 	# also send message which received from Chatroom to these clients
 	chat.register(ws)
-	redis.publish('chat','New user come in, people count:%s'%len(chat.clients))
+	redis.publish(
+		'chat',
+		json.dumps(dict(
+			username='New user come in, people count:',
+			text=str(len(chat.clients))
+		)
+	))
 	while not ws.closed:
 		gevent.sleep(0.1)
 
