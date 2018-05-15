@@ -69,7 +69,7 @@ def outbox(ws):
 	redis.publish(
 		'chat',
 		json.dumps(dict(
-			username='New user come in, people count:',
+			username='New user come in, people count',
 			text=str(len(chat.clients))
 		)
 	))

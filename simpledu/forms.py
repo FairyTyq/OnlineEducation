@@ -1,6 +1,7 @@
 # coding:utf-8
 
 import re
+import json
 
 from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField,SubmitField,BooleanField
@@ -125,4 +126,9 @@ class MessageForm(FlaskForm):
     submit = SubmitField('Submit')
 
     def send_msg(self):
-        redis.publish('chat','System: %s'%self.msg)
+        redis.publish(
+            'chat',
+            json.dumps(dict(
+            username='System',
+            text=str(self.msg.data)
+            )))
