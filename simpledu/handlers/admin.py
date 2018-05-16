@@ -1,4 +1,5 @@
 # coding=utf-8
+import json
 
 from flask import Blueprint,render_template
 from flask import redirect,url_for,flash
@@ -6,6 +7,7 @@ from flask import request,current_app
 from simpledu.decorators import admin_required
 from simpledu.models import Course,User,Live
 from simpledu.forms import CourseForm,UserForm,LiveForm,MessageForm,db
+from .ws import redis
 
 admin = Blueprint('admin',__name__,url_prefix='/admin')
 
@@ -136,6 +138,11 @@ def delete_live(live_id):
 def message():
 	form = MessageForm()
 	if form.validate_on_submit():
-		form.send_msg()
+		redis.publish(
+		    'chat',
+		    json.dumps(dict(
+		    username='System',
+		    text=str(form.msg.data)
+		    )))
 		flash('Send Message,OK!')
 	return render_template('admin/sys_msg.html',form=form)
